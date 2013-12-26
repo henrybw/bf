@@ -59,11 +59,18 @@ void init(const char *filename)
         fprintf(stderr, "File \"%s\" could not be opened.\n", filename);
         exit(1);
     }
+
     instrs = loadinstrs(file);
     ip = 0;
     fclose(file);
 
     stack = (size_t *)calloc(STACK_PAGE, sizeof(size_t));
+    if (!stack)
+    {
+        fprintf(stderr, "Failed to allocate the interpreter stack.\n");
+        exit(1);
+    }
+
     stacksize = STACK_PAGE;
     sp = 0;
 
@@ -153,6 +160,11 @@ void handlejump(char jumpinst)
             {
                 stacksize *= 2;
                 stack = (size_t *)realloc(stack, stacksize);
+                if (!stack)
+                {
+                    fprintf(stderr, "Stack overflow.\n");
+                    exit(1);
+                }
             }
         }
         else
