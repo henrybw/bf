@@ -159,7 +159,7 @@ void handlejump(char jumpinst)
             if (sp >= stacksize)
             {
                 stacksize *= 2;
-                stack = (size_t *)realloc(stack, stacksize);
+                stack = (size_t *)realloc(stack, stacksize * sizeof(size_t));
                 if (!stack)
                 {
                     fprintf(stderr, "Stack overflow.\n");
